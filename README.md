@@ -33,6 +33,15 @@ Tripadvisor'da 4,5 yıldızlı bir otel 21 yaşındaki bir öğrenci için de 60
 | 🌅 **Canlı silüetler** | Her şehrin kendi silüeti, o şehrin gerçek saatine göre sabah, gündüz, gün batımı ve gece olarak çizilir. |
 | 🌐 **Türkçe / İngilizce** | Tek dokunuşla dil değişir; yapay zekâ yanıtları da seçilen dilde gelir. |
 
+## Telefona uygulama olarak yükle
+
+Gezgin bir **PWA** (yüklenebilir web uygulaması). Mağaza gerekmeden telefona kurulur, ana ekrandaki simgesinden tam ekran açılır ve internet yokken de açılabilir (yapay zekâ özellikleri internet ister).
+
+- **Android (Chrome):** siteyi aç, **Profil** sekmesindeki **Uygulamayı yükle** düğmesine bas ya da Chrome menüsünden **Uygulamayı yükle**'yi seç.
+- **iPhone (Safari):** siteyi aç, alttaki **Paylaş** düğmesine dokun, **Ana Ekrana Ekle**'yi seç.
+
+Güncellemeler otomatik gelir; uygulamayı yeniden yüklemen gerekmez.
+
 ## Yapay zekâ kurulumu (ücretsiz)
 
 Gün planı, yorum özeti, fotoğraftan yer tanıma, sesli rehber ve sürpriz plan için bir **Google Gemini API anahtarı** gerekir:
@@ -50,7 +59,8 @@ Anahtar yalnızca senin cihazında saklanır ve sadece Google'a gönderilir. **A
 
 ## Teknik yapı
 
-- Tek dosya: `index.html` (HTML + CSS + JavaScript). Derleme ya da sunucu gerekmez.
+- `index.html`: uygulamanın tamamı (HTML + CSS + JavaScript). Derleme ya da sunucu gerekmez.
+- `manifest.webmanifest`, `sw.js` ve simgeler: telefona yükleme ve çevrimdışı açılma için.
 - Şehir silüetleri resim değil; sayfa içinde `<canvas>` ile çizilir.
 - Yapay zekâ: Claude içinde açıldığında Claude, diğer her yerde Google Gemini API.
 - Sesli okuma tarayıcının kendi konuşma motorunu (Web Speech API) kullanır.
@@ -82,5 +92,7 @@ An AI-powered travel guide that ranks places to stay, eat and visit for your pro
 **AI setup (free):** create a Gemini API key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and paste it into **Profile → AI connection**. The key stays in your browser and is sent only to Google. Never commit your key to this repository.
 
 **Data in this version:** the profile is never stored; reviews, stamps and language stay in the browser on that device.
+
+**Install as an app:** on Android open the site and tap **Install app** in the Profile tab; on iPhone use Safari's **Share → Add to Home Screen**.
 
 **Run locally:** clone the repo, run `python3 -m http.server 8000` in the folder and open `http://localhost:8000`.
