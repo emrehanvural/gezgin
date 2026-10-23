@@ -1551,5 +1551,156 @@ applyStatic(); go("explore"); initStore(); openWiz();
   render();
 })();
 </script>
+<style>
+/* Gezgin Pro (demo): profile card, upgrade sheet, PRO chips */
+.procard{background:linear-gradient(135deg,var(--accent),#12232A);color:#fff;border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.procard::after{content:"";position:absolute;inset:0;background-image:var(--pat);opacity:.6;pointer-events:none}
+.procard>*{position:relative;z-index:1}
+.procard .ph{display:flex;align-items:center;gap:8px}
+.procard b{font-family:var(--display);font-weight:400;font-size:21px}
+.procard p{font-size:13.5px;opacity:.92}
+.procard ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.procard li::before{content:"✓ ";color:var(--sun);font-weight:800}
+.procard button{align-self:flex-start;background:var(--sun);color:var(--sun-ink);border-color:var(--sun)}
+.procard button.ghost{background:transparent;color:#fff;border-color:rgb(255 255 255 / .5)}
+.prochip{display:inline-flex;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:2px 7px;border-radius:99px;background:var(--sun);color:var(--sun-ink);line-height:1.5;vertical-align:middle}
+.prochip.on{background:color-mix(in srgb,var(--sun) 30%,var(--surface));color:var(--fg)}
+.brand .prochip{margin-left:2px} h3 .prochip{margin-left:8px}
+#pro{background-color:var(--bg);background-image:radial-gradient(120% 50% at 100% 0%,color-mix(in srgb,var(--sun) 25%,transparent),transparent 60%),radial-gradient(100% 50% at 0% 100%,color-mix(in srgb,var(--accent) 25%,transparent),transparent 60%),var(--pat)}
+#pro .hero-pro{display:flex;flex-direction:column;gap:6px}
+#pro .hero-pro h2{font-size:30px}
+#pro .why{background:color-mix(in srgb,var(--sun) 18%,var(--surface));border-radius:12px;padding:10px 12px;font-size:14px;font-weight:700}
+#pro .feats{display:flex;flex-direction:column;gap:12px}
+#pro .feat{display:flex;gap:12px;align-items:flex-start}
+#pro .feat i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-style:normal;font-weight:800}
+#pro .feat div{display:flex;flex-direction:column}
+#pro .feat b{font-size:15px}
+#pro .feat span{font-size:13px;color:var(--muted)}
+#pro .soon{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 6px;margin-left:6px}
+#pro .plans{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#pro .plan{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--surface);position:relative}
+#pro .plan[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+#pro .plan small{font-size:12px;font-weight:700;color:var(--muted)}
+#pro .plan b{font-family:var(--display);font-weight:400;font-size:22px}
+#pro .plan em{position:absolute;top:-9px;right:10px;font-style:normal;font-size:10.5px;font-weight:800;background:var(--sun);color:var(--sun-ink);padding:2px 7px;border-radius:99px}
+#pro .demo{font-size:12px;color:var(--muted);text-align:center}
+.planlimit{font-size:12.5px;color:var(--muted)}
+.planlimit a{color:var(--accent);font-weight:700;cursor:pointer}
+</style>
+<script>
+(function(){
+  "use strict";
+  const KEY="gezgin.pro", DAY="gezgin.aiday";
+  const T={
+    tr:{chip:"PRO",card_h:"Gezgin Pro",card_p:"Yapay zekânın tamamı, sınır olmadan.",card_btn:"7 gün ücretsiz dene",
+      on_h:"Gezgin Pro açık",on_p:"{plan} · deneme {date} tarihine kadar",on_off:"Pro'yu kapat (demo)",
+      sheet_h:"Gezgin Pro",sheet_p:"Senin gibi gezginler için tüm yapay zekâ özellikleri, sınırsız.",
+      f1:"Sınırsız gün planı",f1s:"Ücretsizde günde 1 plan; Pro'da istediğin kadar.",
+      f2:"Sesli mini rehber",f2s:"Her yerin kısa hikâyesi, telefonun sesiyle.",
+      f3:"Burası neresi?",f3s:"Fotoğraf yükle, yapay zekâ yeri bulsun.",
+      f4:"Anahtarsız yapay zekâ",f4s:"Gemini anahtarı almadan, tek dokunuşla.",soon:"Yakında",
+      m:"Aylık",m_p:"₺49,99",m_s:"her ay",y:"Yıllık",y_p:"₺399",y_s:"ayda ₺33,25",save:"4 ay bedava",
+      go:"7 gün ücretsiz dene",demo:"Bu bir demo: ödeme alınmaz, kart bilgisi istenmez.",later:"Şimdi değil",
+      w_guide:"Sesli mini rehber Gezgin Pro'ya özel.",w_what:"Fotoğraftan yer bulma Gezgin Pro'ya özel.",w_plan:"Bugünkü ücretsiz gün planını kullandın.",
+      lim_free:"Ücretsiz: günde 1 gün planı. ",lim_used:"Bugünkü ücretsiz planını kullandın. ",lim_link:"Pro ile sınırsız",
+      ok:"Gezgin Pro açıldı. İyi gezmeler!",off:"Pro kapatıldı.",monthly:"Aylık plan",yearly:"Yıllık plan"},
+    en:{chip:"PRO",card_h:"Gezgin Pro",card_p:"All of the AI, with no limits.",card_btn:"Try 7 days free",
+      on_h:"Gezgin Pro is on",on_p:"{plan} · trial until {date}",on_off:"Turn off Pro (demo)",
+      sheet_h:"Gezgin Pro",sheet_p:"Every AI feature for travellers like you, unlimited.",
+      f1:"Unlimited day plans",f1s:"1 plan a day on Free; as many as you like on Pro.",
+      f2:"Audio mini guide",f2s:"A short story of every place, read aloud.",
+      f3:"Where is this?",f3s:"Upload a photo and the AI finds the place.",
+      f4:"AI without a key",f4s:"No Gemini key needed, one tap and go.",soon:"Soon",
+      m:"Monthly",m_p:"₺49.99",m_s:"per month",y:"Yearly",y_p:"₺399",y_s:"₺33.25 a month",save:"4 months free",
+      go:"Try 7 days free",demo:"This is a demo: no payment is taken and no card is asked for.",later:"Not now",
+      w_guide:"The audio mini guide is part of Gezgin Pro.",w_what:"Finding a place from a photo is part of Gezgin Pro.",w_plan:"You've used today's free day plan.",
+      lim_free:"Free: 1 day plan a day. ",lim_used:"You've used today's free plan. ",lim_link:"Unlimited with Pro",
+      ok:"Gezgin Pro is on. Happy travels!",off:"Pro turned off.",monthly:"Monthly plan",yearly:"Yearly plan"}
+  };
+  const L=()=>T[document.documentElement.lang==="en"?"en":"tr"];
+  const get=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+  const set=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+  const isPro=()=>!!get(KEY);
+  const today=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
+  const used=()=>{const r=get(DAY);return r&&r.d===today()?r.n:0};
+  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+  const toast=s=>{const t=document.getElementById("toast");if(!t)return;t.textContent=s;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,2400)};
+  let choice="y", why="";
+
+  // ---------- upgrade sheet ----------
+  const sheet=el("div","sheet");sheet.id="pro";sheet.hidden=true;sheet.setAttribute("role","dialog");sheet.setAttribute("aria-modal","true");sheet.setAttribute("aria-labelledby","proH");
+  document.body.append(sheet);
+  function open(reason){why=reason||"";sheet.hidden=false;document.body.style.overflow="hidden";renderSheet();sheet.scrollTop=0}
+  function close(){sheet.hidden=true;const d=document.getElementById("detail");document.body.style.overflow=d&&!d.hidden?"hidden":""}
+  function renderSheet(){
+    const l=L(); sheet.innerHTML="";
+    const inn=el("div","in");
+    const bar=el("div","bar");const x=el("button","iconbtn","×");x.type="button";x.setAttribute("aria-label",l.later);x.onclick=close;bar.append(el("span","prochip",l.chip),el("span","",""),x);bar.children[1].style.flex="1";
+    const hero=el("div","hero-pro");const h=el("h2","",l.sheet_h);h.id="proH";hero.append(h,el("p","muted",l.sheet_p));
+    inn.append(bar,hero);
+    if(why)inn.append(el("div","why",why));
+    const feats=el("div","feats panel");
+    [["∞",l.f1,l.f1s],["♪",l.f2,l.f2s],["◎",l.f3,l.f3s],["✦",l.f4,l.f4s,true]].forEach(([ic,b,s,soon])=>{
+      const f=el("div","feat");const i=el("i","",ic);const d=el("div");const bb=el("b",null,b);if(soon)bb.append(el("span","soon",l.soon));d.append(bb,el("span",null,s));f.append(i,d);feats.append(f)});
+    inn.append(feats);
+    const plans=el("div","plans");
+    [["m",l.m,l.m_p,l.m_s],["y",l.y,l.y_p,l.y_s,l.save]].forEach(([k,n,p,s,badge])=>{
+      const b=el("button","plan");b.type="button";b.setAttribute("aria-pressed",choice===k);b.append(el("small",null,n),el("b",null,p),el("small",null,s));if(badge)b.append(el("em",null,badge));
+      b.onclick=()=>{choice=k;renderSheet()};plans.append(b)});
+    inn.append(plans);
+    const go=el("button","primary full",l.go);go.type="button";go.id="proGo";
+    go.onclick=()=>{set(KEY,{plan:choice,start:Date.now()});close();renderAllPro();toast(l.ok)};
+    const later=el("button","full",l.later);later.type="button";later.onclick=close;
+    inn.append(go,later,el("p","demo",l.demo));
+    sheet.append(inn);
+  }
+
+  // ---------- profile card, header chip, plan note, feature chips ----------
+  function renderAllPro(){
+    const l=L(), pro=isPro(), st=get(KEY);
+    const host=document.getElementById("v-profile");
+    if(host){
+      let c=document.getElementById("proCard");
+      if(!c){c=el("div","procard");c.id="proCard"}
+      if(host.children[1]!==c)host.insertBefore(c,host.children[1]||null);
+      c.innerHTML="";
+      const ph=el("div","ph");ph.append(el("b",null,pro?l.on_h:l.card_h),el("span","prochip",l.chip));c.append(ph);
+      if(pro){
+        const end=new Date(st.start+7*864e5).toLocaleDateString(document.documentElement.lang==="en"?"en-GB":"tr-TR",{day:"numeric",month:"long"});
+        c.append(el("p",null,l.on_p.replace("{plan}",st.plan==="y"?l.yearly:l.monthly).replace("{date}",end)));
+        const off=el("button","ghost",l.on_off);off.type="button";off.onclick=()=>{set(KEY,null);renderAllPro();toast(l.off)};c.append(off);
+      }else{
+        c.append(el("p",null,l.card_p));const ul=el("ul");[l.f1,l.f2,l.f3].forEach(s=>ul.append(el("li",null,s)));c.append(ul);
+        const b=el("button",null,l.card_btn);b.type="button";b.onclick=()=>open("");c.append(b);
+      }
+    }
+    const brand=document.querySelector(".brand");
+    if(brand){let b=document.getElementById("proBrand");if(pro&&!b){b=el("span","prochip",l.chip);b.id="proBrand";brand.append(b)}if(!pro&&b)b.remove()}
+    const tagFor=(id,anchor)=>{const a=document.querySelector(anchor);if(!a)return;let ch=document.getElementById(id);if(!ch){ch=el("span","prochip");ch.id=id;a.append(ch)}ch.textContent=l.chip;ch.className="prochip"+(pro?" on":"")};
+    tagFor("proWhat","#whatBtn");
+    tagFor("proGuide","#guidePanel .top h3");
+    const pb=document.getElementById("planBtn");
+    if(pb){let n=document.getElementById("proPlanNote");if(!n){n=el("p","planlimit");n.id="proPlanNote";pb.parentElement.after(n)}
+      n.innerHTML="";n.hidden=pro;if(!pro){n.append(document.createTextNode(used()>=1?l.lim_used:l.lim_free));const a=el("a",null,l.lim_link);a.tabIndex=0;a.onclick=()=>open("");n.append(a)}}
+  }
+
+  // ---------- gates: stop the click before the app's own handler runs ----------
+  document.addEventListener("click",e=>{
+    const b=e.target.closest("#whatBtn,#guideBtn,#planBtn");
+    if(!b||b.disabled||isPro())return;
+    const l=L();
+    if(b.id==="whatBtn"){e.stopPropagation();e.preventDefault();open(l.w_what);return}
+    if(b.id==="guideBtn"){e.stopPropagation();e.preventDefault();open(l.w_guide);return}
+    if(b.id==="planBtn"){
+      if(used()>=1){e.stopPropagation();e.preventDefault();open(l.w_plan);return}
+      set(DAY,{d:today(),n:used()+1});setTimeout(renderAllPro,0);
+    }
+  },true);
+  document.addEventListener("click",e=>{if(e.target.closest("[data-lang],nav.tabs button,#dClose"))setTimeout(()=>{renderAllPro();if(!sheet.hidden)renderSheet()},0)});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)close()});
+  window.gezginPro={open,isPro};
+  renderAllPro(); setTimeout(renderAllPro,0);
+})();
+</script>
 </body>
 </html>
