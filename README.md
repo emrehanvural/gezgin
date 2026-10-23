@@ -31,7 +31,22 @@ Tripadvisor'da 4,5 yıldızlı bir otel 21 yaşındaki bir öğrenci için de 60
 | 🎧 **Sesli mini rehber** | Bir yerin kısa hikâyesini yazar, telefon sesli okur. |
 | 🛂 **Gezi pasaportu** | Gittiğin yerlere damga bas, rozet kazan. |
 | 🌅 **Canlı silüetler** | Her şehrin kendi silüeti, o şehrin gerçek saatine göre sabah, gündüz, gün batımı ve gece olarak çizilir. |
+| ⭐ **Gezgin Pro (demo)** | Ücretsiz sürümde günde 1 yapay zekâ gün planı; Pro'da sınırsız plan, sesli rehber ve fotoğraftan yer bulma. Aylık ₺49,99 ya da yıllık ₺399, 7 gün ücretsiz deneme. Demo: ödeme alınmaz. |
 | 🌐 **Türkçe / İngilizce** | Tek dokunuşla dil değişir; yapay zekâ yanıtları da seçilen dilde gelir. |
+
+## Gezgin Pro (demo)
+
+Pro, uygulamanın iş modelini göstermek için eklendi. **Profil** sekmesindeki Gezgin Pro kartından ya da Pro'ya özel bir özelliğe dokununca açılan pencereden denenebilir.
+
+| Ücretsiz | Gezgin Pro |
+|---|---|
+| Profil, 17 şehir, sana göre sıralama, yorumlar, Nereye?, Beni şaşırt, pasaport | Hepsi dahil |
+| Günde 1 yapay zekâ gün planı | Sınırsız gün planı |
+| — | Sesli mini rehber |
+| — | Burası neresi? (fotoğraftan yer bulma) |
+| — | Anahtarsız yapay zekâ (yakında) |
+
+Fiyat: aylık ₺49,99 ya da yıllık ₺399, 7 gün ücretsiz deneme. **Bu bir demodur: ödeme alınmaz, kart bilgisi istenmez.** Pro durumu sadece o tarayıcıda saklanır. Gerçek sürümde ödeme ve anahtarsız yapay zekâ bir sunucu üzerinden çalışacaktır.
 
 ## Telefona uygulama olarak yükle
 
@@ -87,7 +102,7 @@ An AI-powered travel guide that ranks places to stay, eat and visit for your pro
 
 **Live demo:** https://emrehanvural.github.io/gezgin/
 
-**Features:** step-by-step profile (not saved; asked again on every visit) · 17 cities in Turkey and Europe · match scores with reasons · travel twins · "Where should I go?" city finder · surprise trip · photo place recognition · audio mini guide · travel passport with stamps and badges · live skylines drawn for each city's local time · Turkish/English.
+**Features:** step-by-step profile (not saved; asked again on every visit) · 17 cities in Turkey and Europe · match scores with reasons · travel twins · "Where should I go?" city finder · surprise trip · photo place recognition · audio mini guide · travel passport with stamps and badges · Gezgin Pro (demo: unlimited day plans, audio guide and photo recognition; ₺49.99 a month or ₺399 a year, 7-day free trial, no payment taken) · live skylines drawn for each city's local time · Turkish/English.
 
 **AI setup (free):** create a Gemini API key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) and paste it into **Profile → AI connection**. The key stays in your browser and is sent only to Google. Never commit your key to this repository.
 
