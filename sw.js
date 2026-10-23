@@ -1,6 +1,6 @@
 // Gezgin service worker: lets the app open offline and load instantly.
 // Bump VERSION whenever index.html changes so phones pick up the new version.
-const VERSION = "gezgin-v1";
+const VERSION = "gezgin-v2";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 const FONT_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
 
